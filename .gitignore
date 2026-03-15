@@ -21,7 +21,7 @@ ENV/
 # Dataset folders
 # ------------------------
 
-data/
+
 tiny-imagenet-200/
 tiny-imagenet-200.zip
 
