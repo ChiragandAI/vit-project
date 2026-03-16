@@ -1,7 +1,7 @@
 import os
 import csv
 import itertools
-
+import random
 from train import train_model
 
 
@@ -9,13 +9,13 @@ from train import train_model
 # SEARCH SPACE
 # --------------------------------
 
-patch_sizes = [4, 8, 16]
+patch_sizes = [8, 16]
 
 embedding_dims = [128, 256]
 
-heads_options = [2, 4]
+heads_options = [4,8]
 
-depth_options = [4, 6]
+depth_options = [4, 8]
 
 mlp_dims = [256, 512]
 
@@ -47,7 +47,7 @@ if not os.path.exists(RESULTS_FILE):
         writer = csv.writer(f)
 
         writer.writerow(
-            ["patch", "emb_dim", "heads", "depth", "mlp_dim", "accuracy", "loss"]
+            ["patch", "emb_dim", "heads", "depth", "mlp_dim", "valaccuracy", "valloss"]
         )
 
 
@@ -79,7 +79,7 @@ with open(RESULTS_FILE, "r") as f:
 # GENERATE GRID
 # --------------------------------
 
-configs = list(
+all_configs = list(
     itertools.product(
         patch_sizes,
         embedding_dims,
@@ -89,7 +89,7 @@ configs = list(
     )
 )
 
-
+configs = random.sample(all_configs,12)
 # --------------------------------
 # RUN EXPERIMENTS
 # --------------------------------
@@ -129,4 +129,4 @@ for config in configs:
             [patch, emb, heads, depth, mlp, accuracy, loss]
         )
 
-    print(f"Experiment {key} finished with accuracy {accuracy} and loss {loss}")
+    print(f"Experiment {key} finished with val accuracy {accuracy} and val loss {loss}")
