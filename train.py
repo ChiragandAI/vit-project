@@ -44,7 +44,7 @@ class EarlyStopping:
 # Train One Epoch
 # -------------------------
 
-def train_one_epoch(model, loader, optimizer, criterion):
+def train_one_epoch(model, loader, optimizer, criterion,config):
 
     model.train()
 
@@ -53,7 +53,8 @@ def train_one_epoch(model, loader, optimizer, criterion):
     total = 0
 
     for images, labels in tqdm(loader):
-
+        print("current config",config)
+        
         images = images.to(device)
         labels = labels.to(device)
 
@@ -86,7 +87,7 @@ def train_one_epoch(model, loader, optimizer, criterion):
 # Validation
 # -------------------------
 
-def validate(model, loader, criterion):
+def validate(model, loader, criterion,config):
 
     model.eval()
 
@@ -97,7 +98,7 @@ def validate(model, loader, criterion):
     with torch.no_grad():
 
         for images, labels in tqdm(loader):
-
+            print("current config",config)
             images = images.to(device)
             labels = labels.to(device)
 
@@ -193,7 +194,8 @@ def train_model(
 
 
     best_val_acc = 0
-
+    best_train_acc = 0
+    
     log_file = f"training_log_{config}.csv"
 
     with open(log_file, "w", newline="") as f:
@@ -212,13 +214,15 @@ def train_model(
             model,
             train_loader,
             optimizer,
-            criterion
+            criterion,
+            config
         )
 
         val_loss, val_acc = validate(
             model,
             val_loader,
-            criterion
+            criterion,
+            config
         )
 
         scheduler.step()
@@ -268,14 +272,17 @@ def train_model(
             torch.save(model.state_dict(), best_model_path)
 
             print("Best model saved")
+        if train_acc > best_train_acc:
 
+            best_train_acc = train_acc
+            best_train_loss = train_loss
         if early_stopping(val_loss):
 
             print("Early stopping triggered")
 
             break
 
-    return best_val_acc, best_val_loss
+    return best_val_acc, best_val_loss, best_train_acc, best_train_loss
 
 
 if __name__ == "__main__":
