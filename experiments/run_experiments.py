@@ -47,7 +47,7 @@ if not os.path.exists(RESULTS_FILE):
         writer = csv.writer(f)
 
         writer.writerow(
-            ["patch", "emb_dim", "heads", "depth", "mlp_dim", "valaccuracy", "valloss"]
+            ["patch", "emb_dim", "heads", "depth", "mlp_dim", "valaccuracy","valloss","trainaccuracy","trainloss"]
         )
 
 
@@ -93,9 +93,10 @@ configs = random.sample(all_configs,12)
 # --------------------------------
 # RUN EXPERIMENTS
 # --------------------------------
-
+counter = 1
 for config in configs:
 
+    
     patch, emb, heads, depth, mlp = config
 
     key = (patch, emb, heads, depth, mlp)
@@ -107,10 +108,10 @@ for config in configs:
         continue
 
     print("\n================================")
-    print(f"Running experiment {key}")
+    print(f"Running experiment {counter}/{len(configs)}")
     print("================================\n")
 
-    accuracy,loss = train_model(
+    valaccuracy,valloss,trainaccuracy,trainloss = train_model(
         patch_size=patch,
         emb_dim=emb,
         heads=heads,
@@ -126,7 +127,7 @@ for config in configs:
         writer = csv.writer(f)
 
         writer.writerow(
-            [patch, emb, heads, depth, mlp, accuracy, loss]
+            [patch, emb, heads, depth, mlp, valaccuracy,valloss,trainaccuracy,trainloss]
         )
 
     print(f"Experiment {key} finished with val accuracy {accuracy} and val loss {loss}")
