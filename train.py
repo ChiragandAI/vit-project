@@ -51,9 +51,9 @@ def train_one_epoch(model, loader, optimizer, criterion,config):
     running_loss = 0
     correct = 0
     total = 0
-
+    print("current config",config)
     for images, labels in tqdm(loader):
-        print("current config",config)
+        
         
         images = images.to(device)
         labels = labels.to(device)
@@ -96,9 +96,9 @@ def validate(model, loader, criterion,config):
     total = 0
 
     with torch.no_grad():
-
+        print("current config",config)
         for images, labels in tqdm(loader):
-            print("current config",config)
+            
             images = images.to(device)
             labels = labels.to(device)
 
