@@ -130,4 +130,5 @@ for config in configs:
             [patch, emb, heads, depth, mlp, valaccuracy,valloss,trainaccuracy,trainloss]
         )
 
-    print(f"Experiment {key} finished with val accuracy {accuracy} and val loss {loss}")
+    print(f"Experiment {key} finished with val accuracy {valaccuracy} and val loss {valloss}")
+    counter += 1 
